@@ -1,7 +1,6 @@
 package com.bytestore.service;
 
 import com.bytestore.dto.RegisterRequestDTO;
-import com.bytestore.entity.Role;
 import com.bytestore.entity.User;
 import com.bytestore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class UserService {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRole(Role.USER);
+        user.setRole(request.role());
         user.setCreatedAt(LocalDateTime.now());
 
         return userRepository.save(user);
