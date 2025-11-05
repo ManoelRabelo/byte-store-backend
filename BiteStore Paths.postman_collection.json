@@ -1,0 +1,290 @@
+{
+	"info": {
+		"_postman_id": "fba80f0b-86f2-4cad-a6a8-c9763b651de5",
+		"name": "BiteStore Paths",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23071367"
+	},
+	"item": [
+		{
+			"name": "User Athentication",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code >= 200 && pm.response.code < 300) {\r",
+									"    const jsonData = pm.response.json();\r",
+									"        pm.environment.set(\"accessToken\", jsonData.accessToken);\r",
+									"} else {\r",
+									"    console.log(\"Falha na requisição, código:\", pm.response.code);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Nico Robin\",\r\n  \"email\": \"robin@bytestore.com\",\r\n  \"password\": \"poneglyph123\",\r\n  \"role\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code >= 200 && pm.response.code < 300) {\r",
+									"    const jsonData = pm.response.json();\r",
+									"        pm.environment.set(\"accessToken\", jsonData.accessToken);\r",
+									"} else {\r",
+									"    console.log(\"Falha na requisição, código:\", pm.response.code);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"chopper@bytestore.com\",\r\n  \"password\": \"doctor123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJzdWIiOiJOYW1pQGVtYWlsLmNvbSIsImlhdCI6MTc2MjMwNTQ1MSwiZXhwIjoxNzYyMzA5MDUxfQ.IfgehyS86EHOfvSd7MZvu78KKBvC935e1ONzhPuuYOg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/teste/testando",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"teste",
+								"testando"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Product Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"PdasdasC Gamer Ryzen 5 5600G\",\r\n  \"description\": \"Deasdasdasdsktop montado com Ryzen 5 5600G, 16GB RAM, SSD 480GB e gabinete com LED RGB.\",\r\n  \"price\": 4299.00,\r\n  \"category\": \"Computadores\",\r\n  \"stockQuantity\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/products",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\t\"name\": \"PC Gamer Ryzen 5 5600G\",\r\n\t\t\"description\": \"Desktop montado com Ryzen 5 5600G, 16GB RAM, SSD 480GB e gabinete com LED RGB.\",\r\n\t\t\"price\": 4199.00,\r\n\t\t\"category\": \"Computadores\",\r\n\t\t\"stockQuantity\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/products/a1d661bc-78eb-4be3-84ca-1a08084298c1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"a1d661bc-78eb-4be3-84ca-1a08084298c1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Get by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/products/a1d661bc-78eb-4be3-84ca-1a08084298c1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"a1d661bc-78eb-4be3-84ca-1a08084298c1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/products",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/products/a1d661bc-78eb-4be3-84ca-1a08084298c1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"products",
+								"a1d661bc-78eb-4be3-84ca-1a08084298c1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
