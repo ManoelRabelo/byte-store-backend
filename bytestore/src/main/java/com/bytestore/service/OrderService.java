@@ -2,11 +2,11 @@ package com.bytestore.service;
 
 import com.bytestore.dto.*;
 import com.bytestore.entity.*;
+import com.bytestore.mapper.OrderMapper;
 import com.bytestore.repository.OrderRepository;
 import com.bytestore.repository.ProductRepository;
 import com.bytestore.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,50 +19,19 @@ import java.util.UUID;
 @Service
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final OrderMapper orderMapper;
 
-    @Autowired
-    private ProductRepository productRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    private OrderResponseDTO mapToOrderResponseDTO(Order order) {
-        List<OrderItemResponseDTO> itemsDTO = order.getOrderItems().stream()
-                .map(this::mapToOrderItemResponseDTO)
-                .toList();
-
-        return new OrderResponseDTO(
-                order.getId(),
-                order.getUser().getId(),
-                order.getStatus(),
-                itemsDTO,
-                order.getTotalAmount(),
-                order.getCreatedAt(),
-                order.getPaidAt());
-    }
-
-    private OrderSummaryDTO mapToOrderSummaryDTO(Order order) {
-        Integer itemCount = order.getOrderItems() != null ? order.getOrderItems().size() : 0;
-
-        return new OrderSummaryDTO(
-                order.getId(),
-                order.getStatus(),
-                order.getTotalAmount(),
-                itemCount,
-                order.getCreatedAt(),
-                order.getPaidAt());
-    }
-
-    private OrderItemResponseDTO mapToOrderItemResponseDTO(OrderItem item) {
-        return new OrderItemResponseDTO(
-                item.getId(),
-                item.getProduct().getId(),
-                item.getProduct().getName(),
-                item.getQuantity(),
-                item.getUnitPrice(),
-                item.getSubtotal());
+    public OrderService(OrderRepository orderRepository,
+                        ProductRepository productRepository,
+                        UserRepository userRepository,
+                        OrderMapper orderMapper) {
+        this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
+        this.userRepository = userRepository;
+        this.orderMapper = orderMapper;
     }
 
     private void validateOrderOwnership(Order order, UUID userId) {
@@ -111,16 +80,15 @@ public class OrderService {
             orderItems.add(orderItem);
         }
 
+        if (!stockAvailable) {
+            throw new IllegalArgumentException("Estoque insuficiente: " + stockErrors.toString());
+        }
+
         Order order = Order.builder()
                 .user(user)
                 .orderItems(new ArrayList<>())
+                .status(OrderStatus.PENDENTE)
                 .build();
-
-        if (!stockAvailable) {
-            order.setStatus(OrderStatus.CANCELADO);
-        } else {
-            order.setStatus(OrderStatus.PENDENTE);
-        }
 
         for (OrderItem item : orderItems) {
             order.addOrderItem(item);
@@ -130,7 +98,7 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
 
-        return mapToOrderResponseDTO(savedOrder);
+        return orderMapper.toResponseDTO(savedOrder);
     }
 
     @Transactional(readOnly = true)
@@ -141,7 +109,7 @@ public class OrderService {
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
 
         return orders.stream()
-                .map(this::mapToOrderSummaryDTO)
+                .map(orderMapper::toSummaryDTO)
                 .toList();
     }
 
@@ -152,7 +120,7 @@ public class OrderService {
 
         validateOrderOwnership(order, userId);
 
-        return mapToOrderResponseDTO(order);
+        return orderMapper.toResponseDTO(order);
     }
 
     @Transactional
@@ -170,6 +138,8 @@ public class OrderService {
             throw new IllegalArgumentException("Não é possível pagar um pedido cancelado.");
         }
 
+        List<Product> productsToUpdate = new ArrayList<>();
+
         for (OrderItem item : order.getOrderItems()) {
             Product product = item.getProduct();
 
@@ -180,14 +150,16 @@ public class OrderService {
             }
 
             product.decreaseStock(item.getQuantity());
-            productRepository.save(product);
+            productsToUpdate.add(product);
         }
+
+        productRepository.saveAll(productsToUpdate);
 
         order.setStatus(OrderStatus.PAGO);
         order.setPaidAt(LocalDateTime.now());
 
         Order paidOrder = orderRepository.save(order);
 
-        return mapToOrderResponseDTO(paidOrder);
+        return orderMapper.toResponseDTO(paidOrder);
     }
 }
