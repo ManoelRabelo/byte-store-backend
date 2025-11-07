@@ -4,9 +4,12 @@ import com.bytestore.dto.AuthRequestDTO;
 import com.bytestore.dto.AuthResponseDTO;
 import com.bytestore.dto.RegisterRequestDTO;
 import com.bytestore.entity.User;
+import com.bytestore.exception.DuplicateResourceException;
+import com.bytestore.exception.UserNotFoundException;
 import com.bytestore.repository.UserRepository;
 import com.bytestore.security.jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,6 +42,10 @@ public class AuthService {
 
     @Transactional
     public AuthResponseDTO register(RegisterRequestDTO request) {
+        userRepository.findByEmail(request.email()).ifPresent(u -> {
+            throw new DuplicateResourceException("Usuário", request.email());
+        });
+
         User user = User.builder()
                 .name(request.name())
                 .email(request.email())
@@ -55,11 +62,16 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public AuthResponseDTO authenticate(AuthRequestDTO request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password())
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.email(), request.password())
+            );
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Email ou senha incorretos");
+        }
+
         User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new UserNotFoundException(request.email()));
 
         String token = jwtService.generateToken(user);
         return buildAuthResponse(user, token);

@@ -1,6 +1,7 @@
 package com.bytestore.security.util;
 
 import com.bytestore.entity.User;
+import com.bytestore.exception.AuthenticationException;
 import com.bytestore.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +30,7 @@ public class AuthenticationUtils {
         String email = userDetails.getUsername();
 
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário autenticado não encontrado."));
+                .orElseThrow(() -> new AuthenticationException("Usuário autenticado não encontrado."));
     }
 
     public String getAuthenticatedUserEmail() {

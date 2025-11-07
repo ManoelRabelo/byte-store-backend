@@ -35,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Nico Robin\",\r\n  \"email\": \"robin@bytestore.com\",\r\n  \"password\": \"poneglyph123\",\r\n  \"role\": \"ADMIN\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Monkey D Luffy\",\r\n  \"email\": \"luffy@bytestore.com\",\r\n  \"password\": \"GomuGomu123\",\r\n  \"role\": \"USER\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -92,7 +92,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"chopper@bytestore.com\",\r\n  \"password\": \"doctor123\"\r\n}",
+							"raw": "{\r\n  \"email\": \"luffy@bytestore.com\",\r\n  \"password\": \"GomuGomu123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -107,30 +107,6 @@
 							"path": [
 								"auth",
 								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "New Request",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJzdWIiOiJOYW1pQGVtYWlsLmNvbSIsImlhdCI6MTc2MjMwNTQ1MSwiZXhwIjoxNzYyMzA5MDUxfQ.IfgehyS86EHOfvSd7MZvu78KKBvC935e1ONzhPuuYOg",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseURL}}/teste/testando",
-							"host": [
-								"{{baseURL}}"
-							],
-							"path": [
-								"teste",
-								"testando"
 							]
 						}
 					},
@@ -154,7 +130,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"PdasdasC Gamer Ryzen 5 5600G\",\r\n  \"description\": \"Deasdasdasdsktop montado com Ryzen 5 5600G, 16GB RAM, SSD 480GB e gabinete com LED RGB.\",\r\n  \"price\": 4299.00,\r\n  \"category\": \"Computadores\",\r\n  \"stockQuantity\": 8\r\n}",
+							"raw": "{\r\n  \"name\": \"Mousepad Gamer Razer Goliathus Extended\",\r\n  \"description\": \"Mousepad estendido 90x30cm, superfície de tecido macio, base antiderrapante, bordas costuradas, design RGB opcional\",\r\n  \"price\": 149.99,\r\n  \"category\": \"Periféricos\",\r\n  \"stockQuantity\": 35\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -186,7 +162,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\t\"name\": \"PC Gamer Ryzen 5 5600G\",\r\n\t\t\"description\": \"Desktop montado com Ryzen 5 5600G, 16GB RAM, SSD 480GB e gabinete com LED RGB.\",\r\n\t\t\"price\": 4199.00,\r\n\t\t\"category\": \"Computadores\",\r\n\t\t\"stockQuantity\": 8\r\n}",
+							"raw": "{\r\n  \"name\": \"Mousepad Gamer Razer Goliathus Extended\",\r\n  \"description\": \"Mousepad estendido 90x30cm, superfície de tecido macio, base antiderrapante, bordas costuradas, design RGB opcional\",\r\n  \"price\": 119.99,\r\n  \"category\": \"Periféricos\",\r\n  \"stockQuantity\": 35\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -194,13 +170,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/products/a1d661bc-78eb-4be3-84ca-1a08084298c1",
+							"raw": "{{baseURL}}/products/43414764-d032-47c2-b0c1-44ce1511982d",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"products",
-								"a1d661bc-78eb-4be3-84ca-1a08084298c1"
+								"43414764-d032-47c2-b0c1-44ce1511982d"
 							]
 						}
 					},
@@ -218,13 +194,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseURL}}/products/a1d661bc-78eb-4be3-84ca-1a08084298c1",
+							"raw": "{{baseURL}}/products/2f74582a-90af-4aae-abfe-ff718eb73ec1",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"products",
-								"a1d661bc-78eb-4be3-84ca-1a08084298c1"
+								"2f74582a-90af-4aae-abfe-ff718eb73ec1"
 							]
 						}
 					},
@@ -265,13 +241,122 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseURL}}/products/a1d661bc-78eb-4be3-84ca-1a08084298c1",
+							"raw": "{{baseURL}}/products/43414764-d032-47c2-b0c1-44ce1511982d",
 							"host": [
 								"{{baseURL}}"
 							],
 							"path": [
 								"products",
-								"a1d661bc-78eb-4be3-84ca-1a08084298c1"
+								"43414764-d032-47c2-b0c1-44ce1511982d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Order Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"productId\": \"96b96674-57ae-4ec9-a743-fff1d4bd7de4\",\r\n      \"quantity\": 1\r\n    },\r\n\t{\r\n      \"productId\": \"821a4947-fadd-4b97-9e03-323b8470ef4b\",\r\n      \"quantity\": 2\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Order Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/orders",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order Get by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/orders/a8618416-08b3-4ebb-8da3-39afec3be512",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"a8618416-08b3-4ebb-8da3-39afec3be512"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Order Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/orders/a8618416-08b3-4ebb-8da3-39afec3be512/payment",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"orders",
+								"a8618416-08b3-4ebb-8da3-39afec3be512",
+								"payment"
 							]
 						}
 					},

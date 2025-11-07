@@ -1,5 +1,7 @@
 package com.bytestore.entity;
 
+import com.bytestore.exception.InsufficientStockException;
+import com.bytestore.exception.ValidationException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,12 +62,11 @@ public class Product {
 
     public void decreaseStock(Integer quantity) {
         if (quantity == null || quantity <= 0) {
-            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+            throw new ValidationException("quantity", "A quantidade deve ser maior que zero.");
         }
         if (!hasStock(quantity)) {
-            throw new IllegalArgumentException(
-                    String.format("Estoque insuficiente para o produto '%s'. Disponível: %d, Solicitado: %d",
-                            this.name, this.stockQuantity, quantity));
+            throw new InsufficientStockException(
+                    this.name, this.stockQuantity, quantity);
         }
         this.stockQuantity -= quantity;
     }

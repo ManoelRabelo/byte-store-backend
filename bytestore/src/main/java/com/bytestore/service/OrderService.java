@@ -2,11 +2,11 @@ package com.bytestore.service;
 
 import com.bytestore.dto.*;
 import com.bytestore.entity.*;
+import com.bytestore.exception.*;
 import com.bytestore.mapper.OrderMapper;
 import com.bytestore.repository.OrderRepository;
 import com.bytestore.repository.ProductRepository;
 import com.bytestore.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,17 +36,17 @@ public class OrderService {
 
     private void validateOrderOwnership(Order order, UUID userId) {
         if (!order.getUser().getId().equals(userId)) {
-            throw new IllegalArgumentException("Este pedido não pertence ao usuário autenticado.");
+            throw new OrderAccessDeniedException(order.getId());
         }
     }
 
     @Transactional
     public OrderResponseDTO createOrder(OrderRequestDTO dto, UUID userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado."));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         if (dto.items() == null || dto.items().isEmpty()) {
-            throw new IllegalArgumentException("O pedido deve conter pelo menos um item.");
+            throw new ValidationException("items", "O pedido deve conter pelo menos um item.");
         }
 
         List<OrderItem> orderItems = new ArrayList<>();
@@ -55,11 +55,10 @@ public class OrderService {
 
         for (OrderItemRequestDTO itemDTO : dto.items()) {
             Product product = productRepository.findById(itemDTO.productId())
-                    .orElseThrow(() -> new EntityNotFoundException(
-                            "Produto com ID " + itemDTO.productId() + " não encontrado."));
+                    .orElseThrow(() -> new ProductNotFoundException(itemDTO.productId()));
 
             if (itemDTO.quantity() == null || itemDTO.quantity() <= 0) {
-                throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+                throw new ValidationException("quantity", "A quantidade deve ser maior que zero.");
             }
 
             if (!product.hasStock(itemDTO.quantity())) {
@@ -81,7 +80,7 @@ public class OrderService {
         }
 
         if (!stockAvailable) {
-            throw new IllegalArgumentException("Estoque insuficiente: " + stockErrors.toString());
+            throw new InsufficientStockException(stockErrors.toString());
         }
 
         Order order = Order.builder()
@@ -104,7 +103,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderSummaryDTO> getUserOrders(UUID userId) {
         userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado."));
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
         List<Order> orders = orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
 
@@ -116,7 +115,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public OrderResponseDTO getOrderById(UUID orderId, UUID userId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
 
         validateOrderOwnership(order, userId);
 
@@ -126,16 +125,16 @@ public class OrderService {
     @Transactional
     public OrderResponseDTO payOrder(UUID orderId, UUID userId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
+                .orElseThrow(() -> new OrderNotFoundException(orderId));
 
         validateOrderOwnership(order, userId);
 
         if (order.getStatus() == OrderStatus.PAGO) {
-            throw new IllegalArgumentException("Este pedido já foi pago.");
+            throw new OrderAlreadyPaidException(order.getId());
         }
 
         if (order.getStatus() == OrderStatus.CANCELADO) {
-            throw new IllegalArgumentException("Não é possível pagar um pedido cancelado.");
+            throw new OrderCancelledException(order.getId());
         }
 
         List<Product> productsToUpdate = new ArrayList<>();
@@ -144,9 +143,8 @@ public class OrderService {
             Product product = item.getProduct();
 
             if (!product.hasStock(item.getQuantity())) {
-                throw new IllegalArgumentException(
-                        String.format("Estoque insuficiente para o produto '%s'. Disponível: %d, Necessário: %d",
-                                product.getName(), product.getStockQuantity(), item.getQuantity()));
+                throw new InsufficientStockException(
+                        product.getName(), product.getStockQuantity(), item.getQuantity());
             }
 
             product.decreaseStock(item.getQuantity());

@@ -3,9 +3,11 @@ package com.bytestore.service;
 import com.bytestore.dto.ProductRequestDTO;
 import com.bytestore.dto.ProductResponseDTO;
 import com.bytestore.entity.Product;
+import com.bytestore.exception.ProductNameAlreadyExistsException;
+import com.bytestore.exception.ProductNotFoundException;
+import com.bytestore.exception.ValidationException;
 import com.bytestore.mapper.ProductMapper;
 import com.bytestore.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +31,7 @@ public class ProductService {
         validateProductData(dto);
 
         productRepository.findByNameIgnoreCase(dto.name()).ifPresent(p -> {
-            throw new IllegalArgumentException("Já existe um produto com este nome.");
+            throw new ProductNameAlreadyExistsException(dto.name());
         });
 
         Product product = Product.builder()
@@ -49,11 +51,11 @@ public class ProductService {
         validateProductData(dto);
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         productRepository.findByNameIgnoreCase(dto.name()).ifPresent(other -> {
             if (!other.getId().equals(product.getId())) {
-                throw new IllegalArgumentException("Já existe outro produto com este nome.");
+                throw new ProductNameAlreadyExistsException(dto.name(), other.getId());
             }
         });
 
@@ -77,25 +79,25 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponseDTO getProductById(UUID id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
+                .orElseThrow(() -> new ProductNotFoundException(id));
         return productMapper.toResponseDTO(product);
     }
 
     @Transactional
     public void deleteProduct(UUID id) {
         Product existing = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         productRepository.delete(existing);
     }
 
     private void validateProductData(ProductRequestDTO dto) {
         if (dto.price() != null && dto.price().compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("O preço não pode ser negativo.");
+            throw new ValidationException("price", "O preço não pode ser negativo.");
         }
 
         if (dto.stockQuantity() != null && dto.stockQuantity() < 0) {
-            throw new IllegalArgumentException("A quantidade em estoque não pode ser negativa.");
+            throw new ValidationException("stockQuantity", "A quantidade em estoque não pode ser negativa.");
         }
     }
 }
