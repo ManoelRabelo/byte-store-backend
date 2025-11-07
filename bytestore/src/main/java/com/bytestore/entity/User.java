@@ -1,10 +1,8 @@
 package com.bytestore.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "tb_users")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
@@ -28,18 +27,13 @@ public class User implements UserDetails {
     @GeneratedValue
     @Column(nullable = false, updatable = false)
     private UUID id;
-
-    @NotBlank(message = "O nome é obrigatório.")
-    @Size(min = 2, max = 100, message = "O nome deve ter entre 2 e 100 caracteres.")
+    
+    @Column(nullable = false)
     private String name;
 
-    @NotBlank(message = "O e-mail é obrigatório.")
-    @Email(message = "Formato de e-mail inválido.")
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank(message = "A senha é obrigatória.")
-    @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
     @Column(nullable = false)
     private String password;
 
@@ -51,6 +45,7 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 
     @Override

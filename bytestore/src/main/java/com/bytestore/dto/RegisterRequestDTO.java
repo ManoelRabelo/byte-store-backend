@@ -3,6 +3,7 @@ package com.bytestore.dto;
 import com.bytestore.entity.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record RegisterRequestDTO(
 
@@ -16,7 +17,7 @@ public record RegisterRequestDTO(
         @NotBlank(message = "A senha é obrigatória.")
         String password,
 
-        @NotBlank(message = "A senha é obrigatória.")
+        @NotNull(message = "O perfil é obrigatório.")
         Role role
 ) {
 }

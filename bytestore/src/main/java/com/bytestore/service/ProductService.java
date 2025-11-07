@@ -3,9 +3,9 @@ package com.bytestore.service;
 import com.bytestore.dto.ProductRequestDTO;
 import com.bytestore.dto.ProductResponseDTO;
 import com.bytestore.entity.Product;
+import com.bytestore.mapper.ProductMapper;
 import com.bytestore.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +16,13 @@ import java.util.UUID;
 @Service
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
+
+    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+        this.productRepository = productRepository;
+        this.productMapper = productMapper;
+    }
 
     @Transactional
     public ProductResponseDTO createProduct(ProductRequestDTO dto) {
@@ -36,7 +41,7 @@ public class ProductService {
                 .build();
 
         Product saved = productRepository.save(product);
-        return mapToResponseDTO(saved);
+        return productMapper.toResponseDTO(saved);
     }
 
     @Transactional
@@ -59,13 +64,13 @@ public class ProductService {
         product.setStockQuantity(dto.stockQuantity());
 
         Product updated = productRepository.save(product);
-        return mapToResponseDTO(updated);
+        return productMapper.toResponseDTO(updated);
     }
 
     @Transactional(readOnly = true)
     public List<ProductResponseDTO> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(this::mapToResponseDTO)
+                .map(productMapper::toResponseDTO)
                 .toList();
     }
 
@@ -73,7 +78,7 @@ public class ProductService {
     public ProductResponseDTO getProductById(UUID id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
-        return mapToResponseDTO(product);
+        return productMapper.toResponseDTO(product);
     }
 
     @Transactional
@@ -93,18 +98,4 @@ public class ProductService {
             throw new IllegalArgumentException("A quantidade em estoque não pode ser negativa.");
         }
     }
-
-    private ProductResponseDTO mapToResponseDTO(Product product) {
-        return new ProductResponseDTO(
-                product.getId(),
-                product.getName(),
-                product.getDescription(),
-                product.getPrice(),
-                product.getCategory(),
-                product.getStockQuantity(),
-                product.getCreatedAt(),
-                product.getUpdatedAt()
-        );
-    }
-
 }

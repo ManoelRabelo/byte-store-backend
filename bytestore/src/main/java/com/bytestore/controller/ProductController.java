@@ -4,22 +4,23 @@ import com.bytestore.dto.ProductRequestDTO;
 import com.bytestore.dto.ProductResponseDTO;
 import com.bytestore.service.ProductService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/products")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -47,10 +48,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> getAllProducts(
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) String name) {
-
+    public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
         List<ProductResponseDTO> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
