@@ -40,7 +40,7 @@ public class OrderService {
         }
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = OrderCancelledDueToStockException.class)
     public OrderResponseDTO createOrder(OrderRequestDTO dto, UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
@@ -50,8 +50,7 @@ public class OrderService {
         }
 
         List<OrderItem> orderItems = new ArrayList<>();
-        boolean stockAvailable = true;
-        StringBuilder stockErrors = new StringBuilder();
+        List<StockIssueDTO> stockIssues = new ArrayList<>();
 
         for (OrderItemRequestDTO itemDTO : dto.items()) {
             Product product = productRepository.findById(itemDTO.productId())
@@ -62,10 +61,12 @@ public class OrderService {
             }
 
             if (!product.hasStock(itemDTO.quantity())) {
-                stockAvailable = false;
-                stockErrors
-                        .append(String.format("Produto '%s': estoque insuficiente (disponível: %d, solicitado: %d). ",
-                                product.getName(), product.getStockQuantity(), itemDTO.quantity()));
+                stockIssues.add(new StockIssueDTO(
+                        product.getId(),
+                        product.getName(),
+                        product.getStockQuantity(),
+                        itemDTO.quantity()
+                ));
             }
 
             OrderItem orderItem = OrderItem.builder()
@@ -75,18 +76,13 @@ public class OrderService {
                     .build();
 
             orderItem.setSubtotal(product.getPrice().multiply(BigDecimal.valueOf(itemDTO.quantity())));
-
             orderItems.add(orderItem);
-        }
-
-        if (!stockAvailable) {
-            throw new InsufficientStockException(stockErrors.toString());
         }
 
         Order order = Order.builder()
                 .user(user)
                 .orderItems(new ArrayList<>())
-                .status(OrderStatus.PENDENTE)
+                .status(stockIssues.isEmpty() ? OrderStatus.PENDENTE : OrderStatus.CANCELADO)
                 .build();
 
         for (OrderItem item : orderItems) {
@@ -94,8 +90,11 @@ public class OrderService {
         }
 
         order.calculateTotalAmount();
-
         Order savedOrder = orderRepository.save(order);
+
+        if (!stockIssues.isEmpty()) {
+            throw new OrderCancelledDueToStockException(savedOrder, stockIssues);
+        }
 
         return orderMapper.toResponseDTO(savedOrder);
     }
@@ -122,7 +121,7 @@ public class OrderService {
         return orderMapper.toResponseDTO(order);
     }
 
-    @Transactional
+    @Transactional(noRollbackFor = OrderCancelledDueToStockException.class)
     public OrderResponseDTO payOrder(UUID orderId, UUID userId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
@@ -138,17 +137,28 @@ public class OrderService {
         }
 
         List<Product> productsToUpdate = new ArrayList<>();
+        List<StockIssueDTO> stockIssues = new ArrayList<>();
 
         for (OrderItem item : order.getOrderItems()) {
             Product product = item.getProduct();
 
             if (!product.hasStock(item.getQuantity())) {
-                throw new InsufficientStockException(
-                        product.getName(), product.getStockQuantity(), item.getQuantity());
+                stockIssues.add(new StockIssueDTO(
+                        product.getId(),
+                        product.getName(),
+                        product.getStockQuantity(),
+                        item.getQuantity()
+                ));
+            } else {
+                product.decreaseStock(item.getQuantity());
+                productsToUpdate.add(product);
             }
+        }
 
-            product.decreaseStock(item.getQuantity());
-            productsToUpdate.add(product);
+        if (!stockIssues.isEmpty()) {
+            order.setStatus(OrderStatus.CANCELADO);
+            Order cancelledOrder = orderRepository.save(order);
+            throw new OrderCancelledDueToStockException(cancelledOrder, stockIssues);
         }
 
         productRepository.saveAll(productsToUpdate);

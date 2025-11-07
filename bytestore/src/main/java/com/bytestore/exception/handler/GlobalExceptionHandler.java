@@ -144,6 +144,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
     }
 
+    @ExceptionHandler(OrderCancelledDueToStockException.class)
+    public ResponseEntity<ErrorResponseDTO> handleOrderCancelledDueToStock(
+            OrderCancelledDueToStockException ex, HttpServletRequest request) {
+        logger.warn("Pedido cancelado devido à falta de estoque: {}", ex.getMessage());
+
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Pedido cancelado - Estoque insuficiente",
+                ex.getMessage(),
+                request.getRequestURI(),
+                "ORDER_CANCELLED_STOCK"
+        );
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
+    }
+
     // ========== EXCEÇÕES DE PEDIDOS ==========
 
     @ExceptionHandler(OrderAlreadyPaidException.class)
