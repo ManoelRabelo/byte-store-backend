@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "fba80f0b-86f2-4cad-a6a8-c9763b651de5",
-		"name": "BiteStore Paths",
+		"name": "ByteStore Paths",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "23071367"
 	},
@@ -35,7 +35,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Monkey D Luffy\",\r\n  \"email\": \"luffy@bytestore.com\",\r\n  \"password\": \"GomuGomu123\",\r\n  \"role\": \"USER\"\r\n}",
+							"raw": "{\r\n\t\"name\": \"Monkey D Luffy\",\r\n\t\"email\": \"luffy@bytestore.com\",\r\n\t\"password\": \"GomuGomu123\",\r\n\t\"role\": \"USER\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -43,9 +43,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/auth/register",
+							"raw": "{{baseUrl}}/auth/register",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"auth",
@@ -92,7 +92,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"luffy@bytestore.com\",\r\n  \"password\": \"GomuGomu123\"\r\n}",
+							"raw": "{\r\n\t\"email\": \"luffy@bytestore.com\",\r\n\t\"password\": \"GomuGomu123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -100,9 +100,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/auth/login",
+							"raw": "{{baseUrl}}/auth/login",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"auth",
@@ -130,7 +130,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Mousepad Gamer Razer Goliathus Extended\",\r\n  \"description\": \"Mousepad estendido 90x30cm, superfície de tecido macio, base antiderrapante, bordas costuradas, design RGB opcional\",\r\n  \"price\": 149.99,\r\n  \"category\": \"Periféricos\",\r\n  \"stockQuantity\": 35\r\n}",
+							"raw": "{\r\n\t\"name\": \"Notebook Dell Inspiron 15\",\r\n\t\"description\": \"Notebook Dell Inspiron 15 3000, Intel Core i5, 8GB RAM, 256GB SSD, Windows 11\",\r\n\t\"price\": 3499.99,\r\n\t\"category\": \"Computadores\",\r\n\t\"stockQuantity\": 15\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -138,9 +138,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/products",
+							"raw": "{{baseUrl}}/products",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"products"
@@ -162,7 +162,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Mousepad Gamer Razer Goliathus Extended\",\r\n  \"description\": \"Mousepad estendido 90x30cm, superfície de tecido macio, base antiderrapante, bordas costuradas, design RGB opcional\",\r\n  \"price\": 119.99,\r\n  \"category\": \"Periféricos\",\r\n  \"stockQuantity\": 35\r\n}",
+							"raw": "{\r\n\t\"name\": \"Notebook Dell Inspiron 15\",\r\n\t\"description\": \"Notebook Dell Inspiron 15 3000, Intel Core i5, 8GB RAM, 256GB SSD, Windows 11\",\r\n\t\"price\": 2999.99,\r\n\t\"category\": \"Computadores\",\r\n\t\"stockQuantity\": 15\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -170,13 +170,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/products/43414764-d032-47c2-b0c1-44ce1511982d",
+							"raw": "{{baseUrl}}/products/d78ce212-bcd6-11f0-9b87-e02e0b47093b",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"products",
-								"43414764-d032-47c2-b0c1-44ce1511982d"
+								"d78ce212-bcd6-11f0-9b87-e02e0b47093b"
 							]
 						}
 					},
@@ -194,13 +194,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseURL}}/products/2f74582a-90af-4aae-abfe-ff718eb73ec1",
+							"raw": "{{baseUrl}}/products/d78ce212-bcd6-11f0-9b87-e02e0b47093b",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"products",
-								"2f74582a-90af-4aae-abfe-ff718eb73ec1"
+								"d78ce212-bcd6-11f0-9b87-e02e0b47093b"
 							]
 						}
 					},
@@ -218,9 +218,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseURL}}/products",
+							"raw": "{{baseUrl}}/products",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"products"
@@ -241,13 +241,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseURL}}/products/43414764-d032-47c2-b0c1-44ce1511982d",
+							"raw": "{{baseUrl}}/products/d78ce212-bcd6-11f0-9b87-e02e0b47093b",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"products",
-								"43414764-d032-47c2-b0c1-44ce1511982d"
+								"d78ce212-bcd6-11f0-9b87-e02e0b47093b"
 							]
 						}
 					},
@@ -271,7 +271,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"productId\": \"96b96674-57ae-4ec9-a743-fff1d4bd7de4\",\r\n      \"quantity\": 1\r\n    },\r\n\t{\r\n      \"productId\": \"821a4947-fadd-4b97-9e03-323b8470ef4b\",\r\n      \"quantity\": 2\r\n    }\r\n  ]\r\n}",
+							"raw": "{\r\n\t\"items\": [\r\n\t\t{\r\n\t\t\t\"productId\": \"96b96674-57ae-4ec9-a743-fff1d4bd7de4\",\r\n\t\t\t\"quantity\": 1\r\n\t    },\r\n\t\t{\r\n\t    \t\"productId\": \"821a4947-fadd-4b97-9e03-323b8470ef4b\",\r\n\t    \t\"quantity\": 2\r\n\t\t}\r\n\t]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -279,9 +279,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/orders",
+							"raw": "{{baseUrl}}/orders",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"orders"
@@ -302,9 +302,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseURL}}/orders",
+							"raw": "{{baseUrl}}/orders",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"orders"
@@ -325,13 +325,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseURL}}/orders/a8618416-08b3-4ebb-8da3-39afec3be512",
+							"raw": "{{baseUrl}}/orders/d78f3f7a-bcd6-11f0-9b87-e02e0b47093b",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"orders",
-								"a8618416-08b3-4ebb-8da3-39afec3be512"
+								"d78f3f7a-bcd6-11f0-9b87-e02e0b47093b"
 							]
 						}
 					},
@@ -349,13 +349,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseURL}}/orders/a8618416-08b3-4ebb-8da3-39afec3be512/payment",
+							"raw": "{{baseUrl}}/orders/d78f3f7a-bcd6-11f0-9b87-e02e0b47093b/payment",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"orders",
-								"a8618416-08b3-4ebb-8da3-39afec3be512",
+								"d78f3f7a-bcd6-11f0-9b87-e02e0b47093b",
 								"payment"
 							]
 						}
@@ -391,9 +391,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/reports/top-users",
+							"raw": "{{baseUrl}}/reports/top-users",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"reports",
@@ -427,9 +427,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/reports/average-ticket",
+							"raw": "{{baseUrl}}/reports/average-ticket",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"reports",
@@ -463,9 +463,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseURL}}/reports/monthly-revenue",
+							"raw": "{{baseUrl}}/reports/monthly-revenue",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"reports",
@@ -480,7 +480,7 @@
 	],
 	"variable": [
 		{
-			"key": "baseURL",
+			"key": "baseUrl",
 			"value": "",
 			"type": "default"
 		}
