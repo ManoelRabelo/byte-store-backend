@@ -363,6 +363,119 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Report top 5 Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"productId\": \"96b96674-57ae-4ec9-a743-fff1d4bd7de4\",\r\n      \"quantity\": 1\r\n    },\r\n\t{\r\n      \"productId\": \"821a4947-fadd-4b97-9e03-323b8470ef4b\",\r\n      \"quantity\": 2\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/reports/top-users",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reports",
+								"top-users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Report Average Ticket",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"productId\": \"96b96674-57ae-4ec9-a743-fff1d4bd7de4\",\r\n      \"quantity\": 1\r\n    },\r\n\t{\r\n      \"productId\": \"821a4947-fadd-4b97-9e03-323b8470ef4b\",\r\n      \"quantity\": 2\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/reports/average-ticket",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reports",
+								"average-ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Report Monthly Revenue",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"items\": [\r\n    {\r\n      \"productId\": \"96b96674-57ae-4ec9-a743-fff1d4bd7de4\",\r\n      \"quantity\": 1\r\n    },\r\n\t{\r\n      \"productId\": \"821a4947-fadd-4b97-9e03-323b8470ef4b\",\r\n      \"quantity\": 2\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/reports/monthly-revenue",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"reports",
+								"monthly-revenue"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"variable": [
