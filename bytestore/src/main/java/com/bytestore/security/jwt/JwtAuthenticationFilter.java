@@ -1,9 +1,14 @@
 package com.bytestore.security.jwt;
 
+import com.bytestore.dto.ErrorResponseDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +24,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final ObjectMapper objectMapper;
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService, ObjectMapper objectMapper) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -41,26 +48,64 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         jwt = authHeader.substring(7);
 
-        username = jwtService.extractUsername(jwt);
+        try {
+            username = jwtService.extractUsername(jwt);
+        } catch (ExpiredJwtException ex) {
+            handleJwtException(response, request, ex, HttpStatus.UNAUTHORIZED, "Token expirado",
+                    "O token de autenticação expirou. Por favor, faça login novamente.", "JWT_EXPIRED");
+            return;
+        } catch (JwtException ex) {
+            handleJwtException(response, request, ex, HttpStatus.UNAUTHORIZED, "Token inválido",
+                    "Erro ao processar o token de autenticação. Por favor, faça login novamente.", "JWT_ERROR");
+            return;
+        }
 
         if (username != null &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.validateToken(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            try {
+                if (jwtService.validateToken(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            } catch (ExpiredJwtException ex) {
+                handleJwtException(response, request, ex, HttpStatus.UNAUTHORIZED, "Token expirado",
+                        "O token de autenticação expirou. Por favor, faça login novamente.", "JWT_EXPIRED");
+                return;
+            } catch (JwtException ex) {
+                handleJwtException(response, request, ex, HttpStatus.UNAUTHORIZED, "Token inválido",
+                        "Erro ao processar o token de autenticação. Por favor, faça login novamente.", "JWT_ERROR");
+                return;
             }
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private void handleJwtException(HttpServletResponse response, HttpServletRequest request,
+                                    Exception ex, HttpStatus status, String error, String message, String errorCode)
+            throws IOException {
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
+                status.value(),
+                error,
+                message,
+                request.getRequestURI(),
+                errorCode
+        );
+
+        response.setStatus(status.value());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+        response.getWriter().flush();
     }
 }

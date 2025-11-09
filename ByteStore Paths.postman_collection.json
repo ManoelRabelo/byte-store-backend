@@ -111,6 +111,30 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Validate Token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/validate?token={{accessToken}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"validate"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -186,13 +210,7 @@
 					"name": "Product Get by Id",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/products/d78ce212-bcd6-11f0-9b87-e02e0b47093b",
 							"host": [
@@ -210,13 +228,7 @@
 					"name": "Product Get All",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{accessToken}}",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/products",
 							"host": [
@@ -478,11 +490,34 @@
 			]
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "",
-			"type": "default"
+			"value": ""
 		}
 	]
 }

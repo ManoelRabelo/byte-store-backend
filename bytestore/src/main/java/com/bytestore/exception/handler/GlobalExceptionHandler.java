@@ -2,6 +2,8 @@ package com.bytestore.exception.handler;
 
 import com.bytestore.dto.ErrorResponseDTO;
 import com.bytestore.exception.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -32,7 +34,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleResourceNotFound(
             ResourceNotFoundException ex, HttpServletRequest request) {
         logger.warn("Recurso não encontrado: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
                 "Recurso não encontrado",
@@ -40,7 +42,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
@@ -48,7 +50,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleProductNotFound(
             ProductNotFoundException ex, HttpServletRequest request) {
         logger.warn("Produto não encontrado: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
                 "Produto não encontrado",
@@ -56,7 +58,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
@@ -64,7 +66,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleOrderNotFound(
             OrderNotFoundException ex, HttpServletRequest request) {
         logger.warn("Pedido não encontrado: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
                 "Pedido não encontrado",
@@ -72,7 +74,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
@@ -80,7 +82,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleUserNotFound(
             UserNotFoundException ex, HttpServletRequest request) {
         logger.warn("Usuário não encontrado: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
                 "Usuário não encontrado",
@@ -88,7 +90,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
@@ -98,7 +100,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleDuplicateResource(
             DuplicateResourceException ex, HttpServletRequest request) {
         logger.warn("Recurso duplicado: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.CONFLICT.value(),
                 "Recurso duplicado",
@@ -106,7 +108,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
@@ -114,7 +116,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleProductNameExists(
             ProductNameAlreadyExistsException ex, HttpServletRequest request) {
         logger.warn("Nome de produto já existe: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.CONFLICT.value(),
                 "Nome de produto já existe",
@@ -122,7 +124,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
@@ -132,7 +134,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleInsufficientStock(
             InsufficientStockException ex, HttpServletRequest request) {
         logger.warn("Estoque insuficiente: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 "Estoque insuficiente",
@@ -140,7 +142,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
     }
 
@@ -166,7 +168,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleOrderAlreadyPaid(
             OrderAlreadyPaidException ex, HttpServletRequest request) {
         logger.warn("Pedido já pago: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 "Pedido já pago",
@@ -174,7 +176,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
     }
 
@@ -182,7 +184,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleOrderCancelled(
             OrderCancelledException ex, HttpServletRequest request) {
         logger.warn("Pedido cancelado: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 "Pedido cancelado",
@@ -190,7 +192,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
     }
 
@@ -198,7 +200,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleOrderAccessDenied(
             OrderAccessDeniedException ex, HttpServletRequest request) {
         logger.warn("Acesso negado ao pedido: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.FORBIDDEN.value(),
                 "Acesso negado",
@@ -206,7 +208,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
@@ -216,7 +218,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleValidation(
             ValidationException ex, HttpServletRequest request) {
         logger.warn("Erro de validação: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 "Erro de validação",
@@ -224,7 +226,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -232,7 +234,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
         logger.warn("Erro de validação de argumentos: {}", ex.getMessage());
-        
+
         List<ErrorResponseDTO.FieldError> fieldErrors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -242,7 +244,7 @@ public class GlobalExceptionHandler {
                         error.getRejectedValue()
                 ))
                 .collect(Collectors.toList());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -252,7 +254,7 @@ public class GlobalExceptionHandler {
                 "VALIDATION_ERROR",
                 fieldErrors
         );
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -260,7 +262,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleConstraintViolation(
             ConstraintViolationException ex, HttpServletRequest request) {
         logger.warn("Violação de constraint: {}", ex.getMessage());
-        
+
         List<ErrorResponseDTO.FieldError> fieldErrors = ex.getConstraintViolations()
                 .stream()
                 .map(violation -> new ErrorResponseDTO.FieldError(
@@ -269,7 +271,7 @@ public class GlobalExceptionHandler {
                         violation.getInvalidValue()
                 ))
                 .collect(Collectors.toList());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -279,7 +281,7 @@ public class GlobalExceptionHandler {
                 "CONSTRAINT_VIOLATION",
                 fieldErrors
         );
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -287,12 +289,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleMethodArgumentTypeMismatch(
             MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
         logger.warn("Tipo de argumento inválido: {}", ex.getMessage());
-        
-        String typeName = ex.getRequiredType() != null 
-                ? ex.getRequiredType().getSimpleName() 
+
+        String typeName = ex.getRequiredType() != null
+                ? ex.getRequiredType().getSimpleName()
                 : "válido";
         String message = String.format("O parâmetro '%s' deve ser do tipo %s", ex.getName(), typeName);
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 "Tipo de argumento inválido",
@@ -300,7 +302,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 "TYPE_MISMATCH"
         );
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -310,7 +312,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleAuthentication(
             com.bytestore.exception.AuthenticationException ex, HttpServletRequest request) {
         logger.warn("Erro de autenticação: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.UNAUTHORIZED.value(),
                 "Erro de autenticação",
@@ -318,7 +320,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 ex.getErrorCode()
         );
-        
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
@@ -326,7 +328,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleBadCredentials(
             BadCredentialsException ex, HttpServletRequest request) {
         logger.warn("Credenciais inválidas: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.UNAUTHORIZED.value(),
                 "Credenciais inválidas",
@@ -334,7 +336,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 "BAD_CREDENTIALS"
         );
-        
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
@@ -342,7 +344,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleAccessDenied(
             AccessDeniedException ex, HttpServletRequest request) {
         logger.warn("Acesso negado: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.FORBIDDEN.value(),
                 "Acesso negado",
@@ -350,8 +352,42 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 "ACCESS_DENIED"
         );
-        
+
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
+    // ========== EXCEÇÕES JWT ==========
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponseDTO> handleExpiredJwtException(
+            ExpiredJwtException ex, HttpServletRequest request) {
+        logger.warn("Token JWT expirado: {}", ex.getMessage());
+
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Token expirado",
+                "O token de autenticação expirou. Por favor, faça login novamente.",
+                request.getRequestURI(),
+                "JWT_EXPIRED"
+        );
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ErrorResponseDTO> handleJwtException(
+            JwtException ex, HttpServletRequest request) {
+        logger.warn("Erro ao processar token JWT: {}", ex.getMessage());
+
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                HttpStatus.UNAUTHORIZED.value(),
+                "Token inválido",
+                "Erro ao processar o token de autenticação. Por favor, faça login novamente.",
+                request.getRequestURI(),
+                "JWT_ERROR"
+        );
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     // ========== EXCEÇÕES GENÉRICAS ==========
@@ -360,7 +396,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleIllegalArgument(
             IllegalArgumentException ex, HttpServletRequest request) {
         logger.warn("Argumento inválido: {}", ex.getMessage());
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 "Argumento inválido",
@@ -368,7 +404,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 "ILLEGAL_ARGUMENT"
         );
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
@@ -376,7 +412,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleRuntimeException(
             RuntimeException ex, HttpServletRequest request) {
         logger.error("Erro inesperado: {}", ex.getMessage(), ex);
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Erro interno do servidor",
@@ -384,7 +420,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 "INTERNAL_ERROR"
         );
-        
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
@@ -392,7 +428,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleGenericException(
             Exception ex, HttpServletRequest request) {
         logger.error("Erro genérico: {}", ex.getMessage(), ex);
-        
+
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Erro interno do servidor",
@@ -400,7 +436,7 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 "INTERNAL_ERROR"
         );
-        
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
