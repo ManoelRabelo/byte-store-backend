@@ -210,22 +210,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
-    @ExceptionHandler(InvalidOrderStatusException.class)
-    public ResponseEntity<ErrorResponseDTO> handleInvalidOrderStatus(
-            InvalidOrderStatusException ex, HttpServletRequest request) {
-        logger.warn("Status de pedido inválido: {}", ex.getMessage());
-        
-        ErrorResponseDTO error = new ErrorResponseDTO(
-                HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                "Status de pedido inválido",
-                ex.getMessage(),
-                request.getRequestURI(),
-                ex.getErrorCode()
-        );
-        
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
-    }
-
     // ========== EXCEÇÕES DE VALIDAÇÃO ==========
 
     @ExceptionHandler(ValidationException.class)
@@ -368,24 +352,6 @@ public class GlobalExceptionHandler {
         );
         
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
-    }
-
-    // ========== EXCEÇÕES DE REGRAS DE NEGÓCIO ==========
-
-    @ExceptionHandler(BusinessRuleException.class)
-    public ResponseEntity<ErrorResponseDTO> handleBusinessRule(
-            BusinessRuleException ex, HttpServletRequest request) {
-        logger.warn("Violação de regra de negócio: {}", ex.getMessage());
-        
-        ErrorResponseDTO error = new ErrorResponseDTO(
-                HttpStatus.UNPROCESSABLE_ENTITY.value(),
-                "Regra de negócio violada",
-                ex.getMessage(),
-                request.getRequestURI(),
-                ex.getErrorCode()
-        );
-        
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
     }
 
     // ========== EXCEÇÕES GENÉRICAS ==========

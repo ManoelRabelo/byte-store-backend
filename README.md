@@ -4,7 +4,6 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen?style=flat-square&logo=spring)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=flat-square&logo=mysql)
 ![Maven](https://img.shields.io/badge/Maven-3.6+-red?style=flat-square&logo=apache-maven)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
 **ByteStore** é uma API RESTful completa para gerenciamento de e-commerce, desenvolvida em **Java 17** com **Spring Boot
 3.5.6**. O sistema oferece autenticação JWT, CRUD de produtos, gerenciamento de pedidos e relatórios administrativos.
@@ -20,6 +19,7 @@
 - [Arquitetura](#-arquitetura)
 - [Pré-requisitos](#-pré-requisitos)
 - [Instalação](#-instalação)
+- [Testes](#-testes)
 - [Configuração do Banco de Dados](#-configuração-do-banco-de-dados)
 - [Usando o Postman](#-usando-o-postman)
 - [Documentação da API](#-documentação-da-api)
@@ -371,6 +371,45 @@ curl http://localhost:8080/products
 ```
 
 Se retornar uma lista (mesmo que vazia), a aplicação está funcionando!
+
+---
+
+## 🧪 Testes
+
+O projeto possui **testes unitários** implementados para garantir a qualidade e confiabilidade do código.
+
+### Executando os Testes
+
+Para executar todos os testes:
+
+```bash
+cd bytestore
+mvn test
+```
+
+Para executar testes de uma classe específica:
+
+```bash
+mvn test -Dtest=ProductServiceTest
+```
+
+### Cobertura de Testes
+
+O projeto possui **~72 testes unitários** cobrindo:
+
+- ✅ **Services** (AuthService, ProductService, OrderService, ReportService)
+- ✅ **Entities** (Product, Order)
+- ✅ **Validações** e regras de negócio
+- ✅ **Casos de sucesso** e erros
+- ✅ **Casos de borda** e valores limites
+
+### Frameworks Utilizados
+
+- **JUnit 5** - Framework de testes
+- **Mockito** - Framework de mocking
+- **AssertJ** - Assertions fluentes
+- **Spring Boot Test** - Testes de integração
+- **Spring Security Test** - Testes de segurança
 
 ---
 
